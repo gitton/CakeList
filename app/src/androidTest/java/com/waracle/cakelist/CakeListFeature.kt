@@ -2,7 +2,7 @@ package com.waracle.cakelist
 
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListNotEmpty
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +23,7 @@ class CakeListFeature {
     @Test
     fun displayCakeListOnLoad() {
         // Context of the app under test.
-        assertDisplayed(R.id.rv_cake_list)
+        assertListNotEmpty(R.id.rv_cake_list)
     }
 
 }

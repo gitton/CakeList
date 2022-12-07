@@ -48,4 +48,7 @@ dependencies {
     androidTestImplementation('com.adevinta.android:barista:4.2.0') {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+
 }
