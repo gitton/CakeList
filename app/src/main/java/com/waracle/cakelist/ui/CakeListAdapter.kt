@@ -29,7 +29,7 @@ class CakeListAdapter : RecyclerView.Adapter<CakeViewHolder>() {
     fun setItems(list : List<CakeItem>)
     {
         this.cakeItems = list
-        notifyDataSetChanged()
+        this.notifyDataSetChanged()
     }
 
 }
