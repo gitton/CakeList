@@ -3,6 +3,8 @@ package com.waracle.cakelist
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +37,21 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
             {
                 cakeListAdapter.setItems(resultState.list)
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.refresh_menu -> {
+                viewModel.getCakes()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

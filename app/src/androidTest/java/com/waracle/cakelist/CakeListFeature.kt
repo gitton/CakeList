@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListNotEmpty
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.waracle.cakelist.di.EspressoIdllingResource
 import org.junit.After
@@ -48,8 +50,19 @@ class CakeListFeature {
         clickListItem(R.id.rv_cake_list,0)
         onView(withText(R.string.cake_details))
             .inRoot(isDialog())
-            .check(matches(isDisplayed()));
+            .check(matches(isDisplayed()))
 
+    }
+
+    @Test
+    fun displayRefreshButton(){
+        assertDisplayed(R.id.refresh_menu)
+    }
+
+    @Test
+    fun refreshListOnClickRefresh(){
+        clickOn(R.id.refresh_menu)
+        assertListNotEmpty(R.id.rv_cake_list)
     }
 
     @After
