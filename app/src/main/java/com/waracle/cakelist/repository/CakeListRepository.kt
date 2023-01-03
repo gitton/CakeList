@@ -1,6 +1,5 @@
 package com.waracle.cakelist.repository
 
-import android.util.Log
 import com.waracle.cakelist.datasource.RemoteDataSource
 import com.waracle.cakelist.util.NetworkConnectedUtil
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +14,7 @@ class CakeListRepository @Inject constructor(private val remoteDataSource : Remo
         return flow {
             if(networkConnected.isOnline()) {
 
-                emit(ResultsState.Success(remoteDataSource.getCakeList()))
+                emit(ResultsState.Success(remoteDataSource.getCakeList().distinct().sortedBy { it.title }))
             }else{
                 emit(ResultsState.NoNetworkError)
             }

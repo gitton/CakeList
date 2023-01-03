@@ -31,12 +31,10 @@ class CakeListViewModelTest{
     @Test
      fun invoke_getCake_fromCakeListRepository() = runBlockingTest {
         val response = ResultsState.Success(mock<List<CakeItem>>())
-        viewModel = CakeListViewModel(cakeListRepository)
         whenever(cakeListRepository.getCakes()).thenReturn(flow{
             emit(response)
         })
         viewModel = CakeListViewModel(cakeListRepository)
-        viewModel.getCakes()
         verify(cakeListRepository, times(1)).getCakes()
      }
 

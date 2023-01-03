@@ -40,7 +40,7 @@ class CakeListRepositoryTest{
 
     @Test
     fun when_getCakeListSuccess_EmitResultStateSuccess() = runBlockingTest{
-        val mockList = mock<List<CakeItem>>()
+        val mockList = emptyList<CakeItem>()
         val successResponse = ResultsState.Success(mockList)
         whenever(remoteDataSource.getCakeList()).thenReturn(mockList)
         whenever(networkConnectedUtil.isOnline()).thenReturn(true)
@@ -86,6 +86,40 @@ class CakeListRepositoryTest{
         cakeListRepository = CakeListRepository(remoteDataSource,networkConnectedUtil)
         val response = cakeListRepository.getCakes().first()
         assertEquals(response,ResultsState.UnKnownError)
+    }
+
+
+    @Test
+    fun when_cakeListWithDuplicates_EmitResultStateWithListOfNoDuplicates() = runBlockingTest{
+        whenever(remoteDataSource.getCakeList()).thenReturn(getCakesList())
+        whenever(networkConnectedUtil.isOnline()).thenReturn(true)
+        cakeListRepository = CakeListRepository(remoteDataSource,networkConnectedUtil)
+        val response = cakeListRepository.getCakes().first()
+        val list = (response as ResultsState.Success).list.distinct()
+        assertEquals(list.size,getCakesList().distinct().size)
+    }
+
+    @Test
+    fun when_cakeListWithDuplicates_EmitResultStateWithListAlphabeticalOrder() = runBlockingTest{
+        val cakeList = getCakesList()
+        whenever(remoteDataSource.getCakeList()).thenReturn(cakeList)
+        whenever(networkConnectedUtil.isOnline()).thenReturn(true)
+        cakeListRepository = CakeListRepository(remoteDataSource,networkConnectedUtil)
+        val response = cakeListRepository.getCakes().first()
+        val responseList = cakeList.distinct().sortedBy { it.title }
+        assertEquals(response,ResultsState.Success(responseList))
+    }
+
+    private fun getCakesList() : List<CakeItem>{
+        return listOf(
+            CakeItem("Demon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Lemon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Lemon cheesecake 1","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Lemon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Aemon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Bemon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Cemon cheesecake","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"),
+            CakeItem("Lemon cheesecake2","A cheesecake made of lemon","https://s3-eu-west-1.amazonaws.com"))
     }
 
 }

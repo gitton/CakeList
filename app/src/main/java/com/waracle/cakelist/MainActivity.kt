@@ -33,6 +33,5 @@ class MainActivity : AppCompatActivity() {
                 cakeListAdapter.setItems(resultState.list)
             }
         }
-//        viewModel.getCakes()
     }
 }
