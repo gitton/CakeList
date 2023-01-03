@@ -1,9 +1,15 @@
 package com.waracle.cakelist
 
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListNotEmpty
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.waracle.cakelist.di.EspressoIdllingResource
 import org.junit.After
 
@@ -33,6 +39,17 @@ class CakeListFeature {
     fun displayCakeListOnLoad() {
         // Context of the app under test.
         assertListNotEmpty(R.id.rv_cake_list)
+    }
+
+
+    @Test
+    fun displayCakeDescriptionOnClick() {
+        // Context of the app under test.
+        clickListItem(R.id.rv_cake_list,0)
+        onView(withText(R.string.cake_details))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()));
+
     }
 
     @After

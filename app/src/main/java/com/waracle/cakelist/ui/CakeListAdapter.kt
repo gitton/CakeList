@@ -6,13 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.waracle.cakelist.data.CakeItem
 import com.waracle.cakelist.databinding.CakeItemBinding
 
-class CakeListAdapter : RecyclerView.Adapter<CakeViewHolder>() {
+class CakeListAdapter(private val listener: Listener) : RecyclerView.Adapter<CakeViewHolder>(), CakeViewHolder.Listener {
+
+    interface Listener{
+        fun onClickCake(item : CakeItem)
+    }
 
     private var cakeItems : List<CakeItem> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CakeViewHolder {
         val binding = CakeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CakeViewHolder(binding)
+        return CakeViewHolder(binding,this)
     }
 
     override fun onBindViewHolder(holder: CakeViewHolder, position: Int) {
@@ -30,6 +34,10 @@ class CakeListAdapter : RecyclerView.Adapter<CakeViewHolder>() {
     {
         this.cakeItems = list
         this.notifyDataSetChanged()
+    }
+
+    override fun onClick(position: Int) {
+        listener.onClickCake(cakeItems[position])
     }
 
 }
