@@ -1,10 +1,10 @@
 package com.waracle.cakelist
 
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,9 +33,19 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
             adapter = cakeListAdapter
         }
         viewModel.viewState.observe(this) { resultState ->
-            if(resultState is ResultsState.Success)
+            when (resultState)
             {
-                cakeListAdapter.setItems(resultState.list)
+                is ResultsState.Success -> {
+                    binding.rvCakeList.visibility = View.VISIBLE
+                    binding.layoutError.root.visibility = View.GONE
+                    cakeListAdapter.setItems(resultState.list)
+                }
+                ResultsState.NoNetworkError -> {
+                    showErrorMessage(getString(R.string.no_internet_connection))
+                }
+                ResultsState.UnKnownError -> {
+                    showErrorMessage(getString(R.string.looks_like_there_was_problem_loading_cake_list))
+                }
             }
         }
     }
@@ -45,10 +55,25 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
         return true
     }
 
+    //Display error message and option to retry cake list
+    private fun showErrorMessage(message : String){
+        binding.rvCakeList.visibility = View.GONE
+        binding.layoutError.root.visibility = View.VISIBLE
+        binding.layoutError.tvErrorMessage.text = message
+        binding.layoutError.btnRetry.setOnClickListener() {
+            retryCakeList()
+        }
+    }
+
+    //Retry cake List items
+    private fun retryCakeList(){
+        viewModel.getCakes()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.refresh_menu -> {
-                viewModel.getCakes()
+                retryCakeList()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -64,9 +89,8 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
         val alertDialog: AlertDialog = this.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton(R.string.ok,
-                    DialogInterface.OnClickListener { dialog, id ->
-                    })
+                setPositiveButton(R.string.ok){ dialog, id ->
+                    }
             }
             builder.setTitle(R.string.cake_details)
             builder.setMessage("$title : $description")

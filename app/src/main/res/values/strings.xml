@@ -3,4 +3,7 @@
     <string name="cake_details">Cake Details</string>
     <string name="ok">OK</string>
     <string name="refresh_cake_list">Refresh Cake List</string>
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="looks_like_there_was_problem_loading_cake_list">It looks like there was a problem loading the cake list</string>
 </resources>
