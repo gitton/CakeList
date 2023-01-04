@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
 
         //observe live data
         viewModel.viewState.observe(this) { resultState ->
+            setProgressBar(View.GONE)
             when (resultState)
             {
                 is ResultsState.Success -> {
@@ -55,6 +56,11 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
                 }
             }
         }
+    }
+
+    //set Progress Bar Visiblity
+    private fun setProgressBar(visibility: Int){
+        binding.progressBar.visibility = visibility
     }
 
     //Return fade In Animation
@@ -81,6 +87,7 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
 
     //Retry cake List items
     private fun retryCakeList(){
+        setProgressBar(View.VISIBLE)
         viewModel.getCakes()
     }
 
