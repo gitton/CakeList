@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,12 +28,17 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         val cakeListAdapter = CakeListAdapter(this)
+        val fadeInAnimation = getAnimation()
 
         with(binding.rvCakeList){
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = cakeListAdapter
+            animation = fadeInAnimation
         }
+
+        //observe live data
         viewModel.viewState.observe(this) { resultState ->
             when (resultState)
             {
@@ -48,6 +55,13 @@ class MainActivity : AppCompatActivity(), CakeListAdapter.Listener {
                 }
             }
         }
+    }
+
+    //Return fade In Animation
+    private fun getAnimation() : Animation{
+        val fadeInAnimation = AlphaAnimation(0.0f, 1.0f)
+        fadeInAnimation.duration = 500
+        return fadeInAnimation
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
